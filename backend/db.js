@@ -3,13 +3,17 @@ const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 
 const userSchema = new Schema({
-    email: { Type: String, unique: true },
-    password: String
+    email: { type: String, unique: true },
+    password: String,
+    firstname: String,
+    lastName: String
 });
 
 const adminSchema = new Schema({
-    email: { Type: String, unique: true },
-    password: String
+    email: { type: String, unique: true },
+    password: String,
+    firstname: String,
+    lastName: String
 });
 
 const courseSchema = new Schema({
