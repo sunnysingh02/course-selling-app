@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const adminRouter = Router();
-const { adminModel } = require("../db");
+const { adminModel, courseModel } = require("../db");
 const jwt = require("jsonwebtoken");
 const {JWT_ADMIN_PASSWORD} = require("../config")
 
@@ -55,27 +55,45 @@ adminRouter.post("/signin", async function (req, res) {
     }
 })
 
-adminRouter.post("/course", function (req, res) {
+adminRouter.post("/course", async function (req, res) {
+    const adminId=req.userId
+    const {title, description, price, imageURL}=req.body;
+    const course = await courseModel.create({
+        title: title,
+        description:description,
+        price:price,
+        imageURL:imageURL,
+        creatorId: adminId
+    })
     res.json({
-        message: "course created"
+        message: "course created",
+        courseId: course._id
     })
 })
 
-adminRouter.put("/course", function (req, res) {
-    res.json({
-        message: "course updated sucessfully"
+adminRouter.put("/course", async function (req, res) {
+    const adminId = req.userId;
+    const {title, description, price, imageURL, courseId}=req.body;
+    const course = await courseModel.updateOne({
+        _id: courseId,
+        creatorId: adminId
+    },{
+        title: title,
+        description: description,
+        price: price,
+        imageURL: imageURL
     })
-})
-
-adminRouter.delete("/course/delete", function (req, res) {
     res.json({
-        message: " course deleted sucessfully"
+        message: "course updated sucessfully",
+        courseId: course._id
     })
 })
 
 adminRouter.get("/course/bulk", function (req, res) {
+  
     res.json({
-        message: "all courses"
+        message: "all courses",
+       
     })
 })
 
